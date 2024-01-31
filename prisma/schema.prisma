@@ -21,28 +21,29 @@ model Barbershop {
   name     String
   address  String
   imageUrl String
-  Service  Service[]
+  services Service[]
   bookings Booking[]
 }
 
 model Service {
   id           String     @id @default(uuid())
   name         String
-  price        Decimal    @db.Decimal(8, 2)
+  price        Decimal    @db.Decimal(10, 2)
   barbershopId String
   barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
+  description  String
   bookings     Booking[]
+  imageUrl     String
 }
 
 model Booking {
-  id           String     @id @default(uuid())
-  name         String
-  userId       String
-  user         User       @relation(fields: [userId], references: [id])
-  serviceId    String
-  service      Service    @relation(fields: [serviceId], references: [id])
-  barbershop   Barbershop @relation(fields: [barbershopId], references: [id])
-  barbershopId String
-  date         DateTime
-  status       String
+  id          String     @id @default(uuid())
+  userId      String
+  user        User       @relation(fields: [userId], references: [id])
+  serviceId   String
+  service     Service    @relation(fields: [serviceId], references: [id])
+  babershopId String
+  barbershop  Barbershop @relation(fields: [babershopId], references: [id])
+  date        DateTime
+  status      String
 }
