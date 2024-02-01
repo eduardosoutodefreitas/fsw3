@@ -5,28 +5,25 @@ import { Sheet, SheetContent, SheetTrigger } from "@/app/_components/ui/sheet";
 import { Barbershop } from "@prisma/client";
 import { ChevronLeftIcon, MenuIcon, MapPinIcon, StarIcon } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface BarbershopInfoProps {
   barbershop: Barbershop;
 }
 
 const BarbershopInfo = ({ barbershop }: BarbershopInfoProps) => {
-  const router = useRouter();
-  const handleBackClick = () => {
-    router.back();
-  };
-
   return (
     <div>
       <div className='h-[250px] w-full relative'>
         <Button
-          onClick={handleBackClick}
           size='icon'
+          asChild
           variant='outline'
           className='z-50 absolute top-4 left-4'
         >
-          <ChevronLeftIcon />
+          <Link href={"/"}>
+            <ChevronLeftIcon />
+          </Link>
         </Button>
 
         <Sheet>
