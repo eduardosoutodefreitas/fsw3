@@ -16,7 +16,7 @@ export const SaveBooking = async ({
 }: SaveBookingParams) => {
   await prisma.booking.create({
     data: {
-      babershopId: barbershopId,
+      barbershopId,
       date: date,
       serviceId: serviceId,
       userId: userId,

@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/app/_components/ui/sheet";
-import { Barbershop, Service } from "@prisma/client";
+import { Barbershop, Booking, Service } from "@prisma/client";
 import { ptBR } from "date-fns/locale";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -21,6 +21,7 @@ import { SaveBooking } from "../_actions/save-booking";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { getDayBooking } from "../_actions/get-day-booking";
 
 interface ServiceItemProps {
   service: Service;
@@ -37,7 +38,20 @@ const ServiceItem = ({
   const [hour, setHour] = useState<string | undefined>(undefined);
   const [submitIsLoading, setSubmitIsLoading] = useState<boolean>(false);
   const [sheetIsOpen, setSheetIsOpen] = useState<boolean>(false);
+  const [dayBookings, setDayBookings] = useState<Booking[]>([]);
   const { data } = useSession();
+
+  useEffect(() => {
+    if (!date) {
+      return;
+    }
+    const refreshAvailableHours = async () => {
+      const _dayBookings = await getDayBooking(barbershop.id, date);
+      setDayBookings(_dayBookings);
+    };
+    refreshAvailableHours();
+  }, [date, barbershop.id]);
+
   const handleHourClick = (time: string) => {
     setHour(time);
   };
@@ -76,7 +90,7 @@ const ServiceItem = ({
       setSubmitIsLoading(false);
     }
   };
-  const handleDateClick = (date: Date | undefined) => {
+  const handleDateClick = async (date: Date | undefined) => {
     setDate(date);
     setHour(undefined);
   };
@@ -88,8 +102,25 @@ const ServiceItem = ({
   };
 
   const timeList = useMemo(() => {
-    return date ? generateDayTimeList(date) : [];
-  }, [date]);
+    if (!date) {
+      return [];
+    }
+    return generateDayTimeList(date).filter((time) => {
+      const timeHour = Number(time.split(":")[0]);
+      const timeMinutes = Number(time.split(":")[1]);
+      const booking = dayBookings.find((booking) => {
+        const bookingHour = booking.date.getHours();
+        const bookingMinute = booking.date.getMinutes();
+
+        return bookingHour === timeHour && bookingMinute === timeMinutes;
+      });
+
+      if (!booking) {
+        return true;
+      }
+      return false;
+    });
+  }, [date, dayBookings]);
   return (
     <Card>
       <CardContent className='p-3'>
