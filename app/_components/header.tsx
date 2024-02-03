@@ -11,12 +11,20 @@ import {
   SheetTrigger,
 } from "./ui/sheet";
 import SideMenu from "./sideMenu";
+import Link from "next/link";
 
 const Header = () => {
   return (
     <Card>
       <CardContent className='flex justify-between items-center p-5'>
-        <Image src='/logo.png' alt='fsw barber logo' height={22} width={120} />
+        <Link href={"/"}>
+          <Image
+            src='/logo.png'
+            alt='fsw barber logo'
+            height={22}
+            width={120}
+          />
+        </Link>
 
         <Sheet>
           <SheetTrigger asChild>

@@ -15,22 +15,32 @@ const BookingsPage = async () => {
   if (!session?.user) {
     return redirect("/");
   }
-  const bookings = await prisma.booking.findMany({
-    where: {
-      userId: (session.user as any).id,
-    },
-    include: {
-      service: true,
-      barbershop: true,
-    },
-  });
-
-  const confirmedBookings = bookings.filter((booking: Booking) =>
-    isFuture(booking.date)
-  );
-  const finishedBookings = bookings.filter((booking: Booking) =>
-    isPast(booking.date)
-  );
+  const [confirmedBookings, finishedBookings] = await Promise.all([
+    prisma.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+        date: {
+          gte: new Date(),
+        },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
+    prisma.booking.findMany({
+      where: {
+        userId: (session.user as any).id,
+        date: {
+          lt: new Date(),
+        },
+      },
+      include: {
+        service: true,
+        barbershop: true,
+      },
+    }),
+  ]);
   return (
     <>
       <Header />
