@@ -1,5 +1,6 @@
 "use server";
 import prisma from "@/app/_lib/prisma";
+import { revalidatePath } from "next/cache";
 
 interface SaveBookingParams {
   barbershopId: string;
@@ -22,4 +23,6 @@ export const SaveBooking = async ({
       userId: userId,
     },
   });
+  revalidatePath("/");
+  revalidatePath("/bookings");
 };
