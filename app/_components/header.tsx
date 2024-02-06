@@ -15,29 +15,31 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <Card>
-      <CardContent className='flex justify-between items-center p-5'>
-        <Link href={"/"}>
-          <Image
-            src='/logo.png'
-            alt='fsw barber logo'
-            height={22}
-            width={120}
-          />
-        </Link>
+    <header>
+      <Card>
+        <CardContent className='flex justify-between items-center p-5'>
+          <Link href={"/"}>
+            <Image
+              src='/logo.png'
+              alt='fsw barber logo'
+              height={22}
+              width={120}
+            />
+          </Link>
 
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant='outline' className='h-8 w-8' size='icon'>
-              <MenuIcon size={18} />
-            </Button>
-          </SheetTrigger>
-          <SheetContent className='p-0'>
-            <SideMenu />
-          </SheetContent>
-        </Sheet>
-      </CardContent>
-    </Card>
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant='outline' className='h-8 w-8' size='icon'>
+                <MenuIcon size={18} />
+              </Button>
+            </SheetTrigger>
+            <SheetContent className='p-0'>
+              <SideMenu />
+            </SheetContent>
+          </Sheet>
+        </CardContent>
+      </Card>
+    </header>
   );
 };
 
