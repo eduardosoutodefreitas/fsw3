@@ -1,13 +1,11 @@
 import React from "react";
 import Header from "../_components/header";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
 import prisma from "../_lib/prisma";
 import { redirect } from "next/navigation";
-import ServiceItem from "../barbershops/[id]/_components/service-item";
 import BookingItem from "../_components/booking-item";
 import { Booking } from "@prisma/client/edge";
-import { isFuture, isPast } from "date-fns";
+import { authOptions } from "../_lib/auth";
 
 const BookingsPage = async () => {
   const session = await getServerSession(authOptions);
