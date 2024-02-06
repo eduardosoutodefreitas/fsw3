@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../_components/header";
 import { getServerSession } from "next-auth";
-import prisma from "../_lib/prisma";
+import { db } from "../_lib/prisma";
 import { redirect } from "next/navigation";
 import BookingItem from "../_components/booking-item";
 import { Booking } from "@prisma/client/edge";
@@ -14,7 +14,7 @@ const BookingsPage = async () => {
     return redirect("/");
   }
   const [confirmedBookings, finishedBookings] = await Promise.all([
-    prisma.booking.findMany({
+    db.booking.findMany({
       where: {
         userId: (session.user as any).id,
         date: {
@@ -26,7 +26,7 @@ const BookingsPage = async () => {
         barbershop: true,
       },
     }),
-    prisma.booking.findMany({
+    db.booking.findMany({
       where: {
         userId: (session.user as any).id,
         date: {

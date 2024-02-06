@@ -1,7 +1,9 @@
 import { Barbershop } from "@prisma/client";
 import BarbershopItem from "../(home)/_components/barbershop-item";
 import Header from "../_components/header";
-import prisma from "../_lib/prisma";
+import { db } from "../_lib/prisma";
+import { redirect } from "next/navigation";
+import Search from "../(home)/_components/search";
 interface BarbershopPageProps {
   searchParams: {
     search?: string;
@@ -9,7 +11,11 @@ interface BarbershopPageProps {
 }
 
 const BarbershopPage = async ({ searchParams }: BarbershopPageProps) => {
-  const barbershops = prisma.barbershop.findMany({
+  if (!searchParams.search) {
+    return redirect("/");
+  }
+
+  const barbershops = await db.barbershop.findMany({
     where: {
       name: {
         contains: searchParams.search,
@@ -21,11 +27,18 @@ const BarbershopPage = async ({ searchParams }: BarbershopPageProps) => {
     <>
       <Header />
 
-      <div className='px-5 py-6'>
+      <div className='px-5 py-6 flex flex-col gap-6'>
+        <Search
+          defaultValues={{
+            search: searchParams.search,
+          }}
+        />
+
         <h1 className='text-gray-400 font-bold text-xs uppercase'>
-          Resultado para &ldquo;{searchParams.search}&ldquo;
+          Resultados para &quot;{searchParams.search}&quot;
         </h1>
-        <div className='grid grid-cols-2 gap-3 mt-3'>
+
+        <div className='grid grid-cols-2 gap-4'>
           {barbershops.map((barbershop: Barbershop) => (
             <div key={barbershop.id} className='w-full'>
               <BarbershopItem barbershop={barbershop} />

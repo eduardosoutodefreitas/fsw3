@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/app/_lib/prisma";
+import { db } from "@/app/_lib/prisma";
 import { revalidatePath } from "next/cache";
 
 interface SaveBookingParams {
@@ -15,7 +15,7 @@ export const SaveBooking = async ({
   serviceId,
   userId,
 }: SaveBookingParams) => {
-  await prisma.booking.create({
+  await db.booking.create({
     data: {
       barbershopId,
       date: date,
