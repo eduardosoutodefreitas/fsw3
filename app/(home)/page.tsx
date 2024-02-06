@@ -75,7 +75,9 @@ export default async function Home() {
         <div>
           <div className='flex gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden px-5'>
             {barbershops.map((barbershop: Barbershop) => (
-              <BarbershopItem barbershop={barbershop} key={barbershop.id} />
+              <div className='min-w-[167px] max-w-[167px]' key={barbershop.id}>
+                <BarbershopItem barbershop={barbershop} key={barbershop.id} />
+              </div>
             ))}
           </div>
         </div>
